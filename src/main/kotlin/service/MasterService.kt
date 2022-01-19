@@ -3,7 +3,7 @@ package org.operacon.service
 import org.operacon.bean.Config
 
 object MasterService {
-    val groupMap = HashMap<String, Long>()
+    private val groupMap = HashMap<String, Long>()
 
     fun initGroupMap() {
         for (i in Config.groups) {
