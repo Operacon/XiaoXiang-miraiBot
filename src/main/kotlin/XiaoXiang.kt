@@ -25,9 +25,9 @@ object XiaoXiang : KotlinPlugin(
 
         try {
             Config.reload()
-            GlobalVars.selfId = Bot.instances.last().id
             MasterService.initGroupMap()
         } catch (e: Exception) {
+            e.printStackTrace()
             logger.error { "潇小湘 - 配置文件解析出错" }
         }
         logger.info { "潇小湘 - 主插件加载完毕" }
