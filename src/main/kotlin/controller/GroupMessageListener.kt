@@ -2,16 +2,20 @@ package org.operacon.controller
 
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.content
+import org.operacon.bean.GlobalVars
 import org.operacon.service.GroupCountService
+import org.operacon.service.groupJob.*
 
 class GroupMessageListener(private val event: GroupMessageEvent) {
     suspend fun monitor() {
-        GroupCountService.count(event.group.id, event.sender.id)
-        if (event.message.content == "小湘") {
-            event.group.sendMessage("潇小湘在线上~")
-            return
-        }
+        val content = event.message.content.trim()
+        val split = content.split(GlobalVars.splitter)
+        GroupCountService.count(event)
 
-        GroupCountService.repeat(event)
+        if (GroupCountService.hello(event, split)) return
+        if (DrawLots.scan(event, split)) return
+        if (GroupCountService.repeat(event)) return
+
+        GroupCountService.noneBotCount(event)
     }
 }

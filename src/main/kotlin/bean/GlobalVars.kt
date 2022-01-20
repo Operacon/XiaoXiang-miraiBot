@@ -1,5 +1,6 @@
 package org.operacon.bean
 
 object GlobalVars {
-    var selfId: Long = 0
+    val splitter = Regex(""" +""")
+    val atReplace = Regex("""@[0-9]{5,10} ?""")
 }
