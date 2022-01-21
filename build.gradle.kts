@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "org.operacon"
-version = "0.1-DEBUG"
+version = "0.2-DEBUG"
 
 repositories {
     maven("https://maven.aliyun.com/repository/public")

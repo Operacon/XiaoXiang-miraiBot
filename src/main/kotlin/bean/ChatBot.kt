@@ -22,12 +22,16 @@ object ChatBot {
         if (text == "")
             return false
         if (text.startsWith(Chat.groupKeyword)) {
+            text = text.removeRange(0, Chat.groupKeyword.length)
             if (Chat.enableForGroups) {
-                text = text.removeRange(0, Chat.groupKeyword.length)
                 if (Chat.enableActiveGroups and (event.group.id in Chat.activeGroups))
                     groupSendMessage(chat(text, Chat.url[Chat.activeGroups.indexOf(event.group.id)]), event)
                 else
                     groupSendMessage(chat(text, Chat.url[0]), event)
+                return true
+            }
+            if (Chat.enableActiveGroups) {
+                groupSendMessage(chat(text, Chat.url[Chat.activeGroups.indexOf(event.group.id)]), event)
                 return true
             }
         } else if (Chat.enableActiveGroups && (event.group.id in Chat.activeGroups)) {
