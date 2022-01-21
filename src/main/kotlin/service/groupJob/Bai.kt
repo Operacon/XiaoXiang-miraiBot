@@ -22,7 +22,7 @@ object Bai {
             val ye = GroupCountService.baiCounter[event.sender.id]!!
             val name = event.sender.nameCardOrNick.replaceFirst("我", "你")
             if (sleep <= -2) {
-                event.group.sendMessage("不准睡！")
+                event.group.sendMessage("不许睡！")
                 return true
             }
             if (sleep <= 0) {

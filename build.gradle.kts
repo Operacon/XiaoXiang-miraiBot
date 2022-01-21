@@ -13,3 +13,7 @@ repositories {
     maven("https://maven.aliyun.com/repository/public")
     mavenCentral()
 }
+
+dependencies {
+    implementation("com.squareup.okhttp3:okhttp:4.9.1")
+}

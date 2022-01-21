@@ -18,7 +18,7 @@ object Settings : ReadOnlyPluginConfig("Settings") {
     val enableSpecialService by value(false)
 
     @ValueDescription("设置特殊服务信息保存文件的绝对路径")
-    val pathSpecialService by value("C:\\Users\\Public\\specialData.txt")
+    val pathSpecialService by value("C:/Users/Public/specialData.txt")
 }
 
 object Bai : ReadOnlyPluginConfig("BaiLan") {
@@ -42,4 +42,36 @@ object Bai : ReadOnlyPluginConfig("BaiLan") {
             "\$name 和npy出去xc了 \$sleep 小时开开心心"
         )
     )
+}
+
+object Chat : ReadOnlyPluginConfig("ChatBot") {
+    @ValueDescription("设置 ChatBot 是否在群聊中开启。开启后，通过下面设置的关键词触发。除积极群外所有的群聊共享一个 ChatBot")
+    val enableForGroups by value(false)
+
+    @ValueDescription("设置 ChatBot 在群聊中的关键词，以此开头的句子将被发给 ChatBot")
+    val groupKeyword by value("。")
+
+    @ValueDescription("设置 ChatBot 是否在私聊中开启。开启后，如果用户没有触发其他服务则直接触发。所有好友共享地址池中第一个 ChatBot")
+    val enableForFriends by value(false)
+
+    @ValueDescription("设置请求 ChatBot 的地址池。Params: text 传参，例如 http://localhost:8520/chat?text=发送的句子")
+    val url by value(mutableListOf("http://localhost:8520/chat"))
+
+    @ValueDescription("设置请求 ChatBot 地址的方法")
+    val method by value("POST")
+
+    @ValueDescription("设置是否开启积极群。即使群聊开关未开启，积极群开关也会生效")
+    val enableActiveGroups by value(false)
+
+    @ValueDescription(
+        "设置积极群。积极群中的群聊的所有消息都会被发给各自的 ChatBot （按照上面 ChatBot " +
+                "地址池的顺序一一对应，积极群数量小于等于地址池大小），但机器人只会按下面设置的概率回复。这可以获得更加符合语境和生草的体验，但非常浪费计算资源"
+    )
+    val activeGroups by value(mutableListOf<Long>(114514))
+
+    @ValueDescription("设置积极群回复的概率，请保证为 0 - 1 之间的合法浮点数")
+    val replyProb by value(0.08)
+
+    @ValueDescription("设置 ChatBot 单次发送多条消息的分隔符")
+    val multiSplit by value("[SEP]")
 }
