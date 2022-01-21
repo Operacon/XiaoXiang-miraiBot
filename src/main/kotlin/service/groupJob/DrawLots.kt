@@ -32,6 +32,34 @@ object DrawLots {
             Lot.prob(txt, event)
             return true
         }
+        if (split[0] == "决定") {
+            val s = split.drop(1).distinct()
+            if (split.size == 1) {
+                event.group.sendMessage(event.message.quote() + "所以想决定什么呢")
+                return true
+            }
+            if (s.size == 1) {
+                event.group.sendMessage(event.message.quote() + "只发一项那就是已经决定好了？")
+                return true
+            }
+            var txt = "我觉得 "
+            txt += s.random().replaceFirst("我", "你")
+            event.group.sendMessage(event.message.quote() + txt.trimMargin())
+            return true
+        }
+        if (split[0] == "评价一下") {
+            when (Random.nextInt(0, 8)) {
+                0 -> event.group.sendMessage("鉴定为烂")
+                1 -> event.group.sendMessage("我觉得好")
+                2 -> event.group.sendMessage("小湘觉得不怎么样")
+                3 -> event.group.sendMessage("？我拒绝")
+                4 -> event.group.sendMessage("鉴定为好")
+                5 -> event.group.sendMessage("就不评")
+                6 -> event.group.sendMessage("小湘觉得坏")
+                7 -> event.group.sendMessage("我觉得不好")
+            }
+            return true
+        }
         return false
     }
 }
