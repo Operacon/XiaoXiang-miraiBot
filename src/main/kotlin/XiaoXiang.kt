@@ -1,14 +1,11 @@
 package org.operacon
 
-import net.mamoe.mirai.Bot
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.event.GlobalEventChannel
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.utils.error
 import net.mamoe.mirai.utils.info
-import org.operacon.bean.Config
-import org.operacon.bean.GlobalVars
 import org.operacon.controller.GroupMessageListener
 import org.operacon.service.MasterService
 import java.lang.Exception
@@ -24,8 +21,7 @@ object XiaoXiang : KotlinPlugin(
         GlobalEventChannel.subscribeAlways<GroupMessageEvent> { event -> GroupMessageListener(event).monitor() }
 
         try {
-            Config.reload()
-            MasterService.initGroupMap()
+            MasterService.reloadConfig()
         } catch (e: Exception) {
             e.printStackTrace()
             logger.error { "潇小湘 - 配置文件解析出错" }

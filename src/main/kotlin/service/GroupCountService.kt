@@ -5,10 +5,10 @@ import net.mamoe.mirai.message.data.Image
 import net.mamoe.mirai.message.data.Message
 
 object GroupCountService {
+    val baiCounter = HashMap<Long, Int>()
     private val messageCounter = HashMap<Long, Int>()
     private val imageCounter = HashMap<Long, Int>()
     private val noneBotCounter = HashMap<Long, Int>()
-    private val baiCounter = HashMap<Long, Int>()
     private val repeatCache = HashMap<Long, Message>()
     private val repeatState = HashMap<Long, Boolean>()
 

@@ -14,8 +14,9 @@ class GroupMessageListener(private val event: GroupMessageEvent) {
 
         if (GroupCountService.hello(event, split)) return
         if (DrawLots.scan(event, split)) return
-        if (GroupCountService.repeat(event)) return
+        if (Bai.scan(event, split)) return
 
+        if (GroupCountService.repeat(event)) return
         GroupCountService.noneBotCount(event)
     }
 }
