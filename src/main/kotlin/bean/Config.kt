@@ -13,7 +13,7 @@ import net.mamoe.mirai.console.data.value
 
 object Settings : ReadOnlyPluginConfig("Settings") {
     @ValueDescription("设置此 bot 的 qq 号")
-    val selfId by value(439980487)
+    val selfId by value<Long>(439980487)
 
     @ValueDescription("设置此 bot 主人的 qq 号")
     val masterId by value(mutableListOf<Long>(114514))
