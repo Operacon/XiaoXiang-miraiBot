@@ -9,10 +9,12 @@ package org.operacon.bean
 
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.content
+import net.mamoe.mirai.utils.error
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.operacon.XiaoXiang
 import org.operacon.bean.GlobalVars.atReplace
 import org.operacon.bean.GlobalVars.pagReplace
 import java.io.IOException
@@ -28,24 +30,29 @@ object ChatBot {
         var text = event.message.content.trim().replace(pagReplace, "").replace(atReplace, "")
         if (text == "")
             return false
-        if (text.startsWith(Chat.groupKeyword)) {
-            text = text.removeRange(0, Chat.groupKeyword.length)
-            if (Chat.enableForGroups) {
-                if (Chat.enableActiveGroups and (event.group.id in Chat.activeGroups))
+        try {
+            if (text.startsWith(Chat.groupKeyword)) {
+                text = text.removeRange(0, Chat.groupKeyword.length)
+                if (Chat.enableForGroups) {
+                    if (Chat.enableActiveGroups and (event.group.id in Chat.activeGroups))
+                        groupSendMessage(chat(text, Chat.url[Chat.activeGroups.indexOf(event.group.id)]), event)
+                    else
+                        groupSendMessage(chat(text, Chat.url[0]), event)
+                    return true
+                }
+                if (Chat.enableActiveGroups and (event.group.id in Chat.activeGroups)) {
                     groupSendMessage(chat(text, Chat.url[Chat.activeGroups.indexOf(event.group.id)]), event)
-                else
-                    groupSendMessage(chat(text, Chat.url[0]), event)
-                return true
+                    return true
+                }
+            } else if (Chat.enableActiveGroups && (event.group.id in Chat.activeGroups)) {
+                text = chat(text, Chat.url[Chat.activeGroups.indexOf(event.group.id)])
+                if (Random.nextFloat() <= Chat.replyProb)
+                    groupSendMessage(text, event)
             }
-            if (Chat.enableActiveGroups) {
-                groupSendMessage(chat(text, Chat.url[Chat.activeGroups.indexOf(event.group.id)]), event)
-                return true
-            }
-        } else if (Chat.enableActiveGroups && (event.group.id in Chat.activeGroups)) {
-            text = chat(text, Chat.url[Chat.activeGroups.indexOf(event.group.id)])
-            if (Random.nextFloat() <= Chat.replyProb)
-                groupSendMessage(text, event)
+        } catch (e: Exception) {
+            XiaoXiang.logger.error { "潇小湘 - 聊天机器人出错，检查聊天机器人服务器或者配置文件" }
         }
+
         return false
     }
 
