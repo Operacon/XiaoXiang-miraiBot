@@ -82,6 +82,7 @@
 - 决定。发送 `决定 <object0> <object1> ... <objectn>` 让 bot 帮选一项。
 - 评价。发送 `评价一下 [any]` 让 bot 评价一下。
 - 摆烂。发送 `摆烂额度` 查询额度，在任何 bot 存在的群里发言都会累加。发送 `睡大觉` 或者 `摆烂` 触发。可在配置文件中定制。
+- 统计。每天零点发送前一天发言数目（若不为 0 ）。
 
 #### 私聊
 
@@ -104,8 +105,8 @@
     - 积极群。一切消息转发给 bot 以维持语境，但 bot 仅有给定概率回复。
 
 - 定时任务。
-    - 见 bean/scheduler.kt ，基于 Quartz 实现定时任务。
-    - 每个单独的 Job 应在 bean/jobs/ 下。
+    - 见 bean/Scheduler.kt ，基于 Quartz 实现定时任务。
+    - 每个单独的 Job 应在 bean/scheduledJobs/ 下。
 
 ----
 
@@ -119,3 +120,22 @@
 
 ### 开发提示
 
+#### 增加新的功能
+
+以增加群聊功能为例
+
+- 在 service/groupJobs 下新建一个 object，其包含一个 `scan(event: GroupMessageEvent, split: List<String>)` 函数，可以参考 Bai.kt
+    - 在该函数中，通过判断 `split[x]` 来确定该功能应该如何被触发，并编写功能的逻辑
+    - 功能完成后，必须 `return true`
+    - 如果功能未被触发，则 `return false`
+- 在 controller/GroupMessageListener.kt 中的 `monitor()` 函数的恰当位置插入类似的语句，在 if
+  中调用上述 `scan(event: GroupMessageEvent, split: List<String>)`
+
+#### 增加新的定时任务
+
+- 在 bean/scheduledJobs/ 下新建一个文件，其包含一个继承了 `Job` 的 class 和一个用于包装的 object。可以参考 Statistics.kt
+    - 在上述 class 的 `execute(context: JobExecutionContext?)`
+      中，编写该定时任务的逻辑。如果要发送消息请使用 `import org.operacon.bean.Scheduler.groupMessage` 和 `import org.operacon.bean.
+      Scheduler.friendMessage`。如有类似的需要 suspend 的函数，可参照这两个方法使用协程
+    - 在上述 object 中添加用于描述的 `jobDetail` 和使用 Cron 表达式确定任务在何时执行的 `trigger`
+    - 在 org.operacon.bean.Scheduler 的 `registerJobs()` 中插入对上述 object 的 `register()` 的调用
