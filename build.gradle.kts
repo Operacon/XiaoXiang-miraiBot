@@ -16,4 +16,6 @@ repositories {
 
 dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.9.1")
+    implementation("org.quartz-scheduler:quartz:2.2.1")
+    implementation("org.quartz-scheduler:quartz-jobs:2.2.1")
 }

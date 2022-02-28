@@ -14,6 +14,7 @@ import net.mamoe.mirai.event.events.FriendMessageEvent
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.utils.error
 import net.mamoe.mirai.utils.info
+import org.operacon.bean.Scheduler
 import org.operacon.controller.FriendMessageListener
 import org.operacon.controller.GroupMessageListener
 import org.operacon.service.MasterService
@@ -35,6 +36,12 @@ object XiaoXiang : KotlinPlugin(
         } catch (e: Exception) {
             e.printStackTrace()
             logger.error { "潇小湘 - 配置文件解析出错" }
+        }
+        try {
+            Scheduler.registerJobs()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            logger.error { "潇小湘 - 定时任务解析出错" }
         }
         logger.info { "潇小湘 - 主插件加载完毕" }
     }
