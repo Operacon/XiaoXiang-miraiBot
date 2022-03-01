@@ -22,6 +22,7 @@ object Scheduler {
 
     fun registerJobs() {
         StatisticsHandler.register()
+        DkHandler.register()
     }
 
     fun groupMessage(id: Long, message: String) = runBlocking {

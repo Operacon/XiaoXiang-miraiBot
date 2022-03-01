@@ -11,11 +11,13 @@ import net.mamoe.mirai.event.events.FriendMessageEvent
 import net.mamoe.mirai.message.data.content
 import org.operacon.bean.GlobalVars
 import org.operacon.service.MasterService
+import org.operacon.service.friendJob.SpecialReg
 
 class FriendMessageListener(private val event: FriendMessageEvent) {
     suspend fun monitor() {
         val content = event.message.content.trim()
         val split = content.split(GlobalVars.splitter)
+        if(SpecialReg.scan(event, split)) return
 
         if(MasterService.scan(event, split)) return
     }
