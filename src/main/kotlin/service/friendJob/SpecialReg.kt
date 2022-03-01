@@ -14,7 +14,6 @@ import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.operacon.bean.ChatBot
-import org.operacon.bean.Settings
 import org.operacon.bean.Settings.enableSpecialService
 import org.operacon.bean.Settings.pathSpecialService
 import java.io.File
@@ -53,7 +52,7 @@ object SpecialReg {
             }
         }
         if (split[0] == "试试打卡") {
-            val ls = File(Settings.pathSpecialService).readText().split(";;;")
+            val ls = File(pathSpecialService).readText().split(";;;")
             for (i in ls) {
                 if (i == "")
                     continue
@@ -71,7 +70,7 @@ object SpecialReg {
                     return true
                 }
             }
-            event.sender.sendMessage("没找到你的信息，你发一下“帮我打卡”")
+            event.sender.sendMessage("没找到你的信息~")
             return true
         }
         return false

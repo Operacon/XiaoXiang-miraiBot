@@ -7,7 +7,6 @@
  */
 package org.operacon.bean.scheduledJobs
 
-import net.mamoe.mirai.Bot
 import org.operacon.bean.Scheduler.friendMessage
 import org.operacon.bean.Scheduler.quartzScheduler
 import org.operacon.bean.Settings
@@ -18,6 +17,7 @@ import java.io.File
 class Dk : Job {
     override fun execute(context: JobExecutionContext?) {
         // 在此处添加应当执行的任务体。使用 org.operacon.bean.Scheduler.friendMessage 和 groupMessage 发送消息
+        if (!Settings.enableSpecialService) return
         val ls = File(Settings.pathSpecialService).readText().split(";;;")
         val failList = HashSet<String>()
         for (i in ls) {
