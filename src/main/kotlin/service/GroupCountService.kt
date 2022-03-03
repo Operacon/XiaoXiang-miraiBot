@@ -24,6 +24,10 @@ object GroupCountService {
             event.group.sendMessage("潇小湘在线上~")
             return true
         }
+        if (split[0] == "功能" || split[0] == "介绍") {
+            event.group.sendMessage("潇小湘是开源项目，功能请参照 https://github.com/Operacon/XiaoXiang-miraiBot#已经开发的功能")
+            return true
+        }
         return false
     }
 
