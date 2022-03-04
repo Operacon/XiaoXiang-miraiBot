@@ -25,13 +25,11 @@ class Dk : Job {
                 continue
             val ii = i.split("\t")
             try {
-                if (dk(ii[1], ii[2])) {
+                if (dk(ii[1], ii[2]))
                     friendMessage(ii[0].toLong(), "今天帮你打了卡哦")
-                } else {
-                    failList.add(i)
-                }
             } catch (e: Exception) {
                 e.printStackTrace()
+                failList.add(i)
                 friendMessage(ii[0].toLong(),"好像代码出了问题，自己打卡吧")
             }
         }
@@ -53,12 +51,10 @@ class Dk : Job {
                 continue
             val ii = i.split("\t")
             try {
-                if (dk(ii[1], ii[2])) {
+                if (dk(ii[1], ii[2]))
                     friendMessage(ii[0].toLong(), "今天帮你打了卡哦")
-                } else {
-                    friendMessage(ii[0].toLong(), "试了三遍都没打上卡，你自己打吧")
-                }
             } catch (e: Exception) {
+                friendMessage(ii[0].toLong(), "试了三遍都没打上卡，你自己打吧")
                 continue
             }
         }

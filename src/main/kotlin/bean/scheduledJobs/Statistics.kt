@@ -36,7 +36,7 @@ object StatisticsHandler {
         .withDescription("每天零点发送统计数据").build()
     // 使用 Cron 表达式确定该任务应该如何执行
     private val trigger: CronTrigger = TriggerBuilder.newTrigger()
-        .withSchedule(CronScheduleBuilder.cronSchedule("0 0 0 * * ?")).build()
+        .withSchedule(CronScheduleBuilder.cronSchedule("0 5 0 * * ?")).build()
 
     fun register() {
         quartzScheduler.scheduleJob(jobDetail, trigger)
