@@ -17,6 +17,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import org.operacon.XiaoXiang
 import org.operacon.bean.GlobalVars.atReplace
 import org.operacon.bean.GlobalVars.pagReplace
+import org.operacon.service.GroupCountService.repeatCache
 import java.io.IOException
 import kotlin.random.Random
 
@@ -26,6 +27,12 @@ object ChatBot {
 
     suspend fun groupScan(event: GroupMessageEvent): Boolean {
         if (!Chat.enableForGroups and !Chat.enableActiveGroups)
+            return false
+        if (repeatCache.containsKey(event.sender.id) && repeatCache[event.sender.id]!!.contentEquals(
+                event.message,
+                ignoreCase = false, strict = true
+            )
+        )
             return false
         var text = event.message.content.trim().replace(pagReplace, "").replace(atReplace, "")
         if (text == "")

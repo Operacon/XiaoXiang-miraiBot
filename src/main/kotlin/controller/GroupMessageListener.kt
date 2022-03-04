@@ -23,8 +23,8 @@ class GroupMessageListener(private val event: GroupMessageEvent) {
         if (DrawLots.scan(event, split)) return
         if (Bai.scan(event, split)) return
 
-        if (GroupCountService.repeat(event)) return
         if (ChatBot.groupScan(event)) return
+        if (GroupCountService.repeat(event)) return
         GroupCountService.noneBotCount(event)
     }
 }
