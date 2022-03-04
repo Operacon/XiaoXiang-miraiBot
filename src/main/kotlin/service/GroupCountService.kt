@@ -16,7 +16,7 @@ object GroupCountService {
     val messageCounter = HashMap<Long, Int>()
     val imageCounter = HashMap<Long, Int>()
     val noneBotCounter = HashMap<Long, Int>()
-    private val repeatCache = HashMap<Long, Message>()
+    val repeatCache = HashMap<Long, Message>()
     private val repeatState = HashMap<Long, Boolean>()
 
     suspend fun hello(event: GroupMessageEvent, split: List<String>): Boolean {
@@ -25,7 +25,8 @@ object GroupCountService {
             return true
         }
         if (split[0] == "功能" || split[0] == "介绍") {
-            event.group.sendMessage("潇小湘是开源项目，功能请参照 https://github.com/Operacon/XiaoXiang-miraiBot#已经开发的功能")
+            event.group.sendMessage("潇小湘是开源项目，功能请参照 https://github.com/Operacon/XiaoXiang-miraiBot#已经开发的功能 。bug " +
+                    "反馈或功能需求请开 issue")
             return true
         }
         return false
