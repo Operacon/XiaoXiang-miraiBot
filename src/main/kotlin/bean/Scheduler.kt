@@ -28,13 +28,19 @@ object Scheduler {
     fun groupMessage(id: Long, message: String) = runBlocking {
         // 其他需要 suspend 的函数调用可以用类似的协程避免
         launch(Dispatchers.Unconfined) {
-            Bot.getInstance(Settings.selfId).getGroup(id)!!.sendMessage(message)
+            try {
+                Bot.getInstance(Settings.selfId).getGroup(id)!!.sendMessage(message)
+            }catch (e: Exception){
+            }
         }
     }
 
     fun friendMessage(id: Long, message: String) = runBlocking {
         launch(Dispatchers.Unconfined) {
-            Bot.getInstance(Settings.selfId).getFriend(id)!!.sendMessage(message)
+            try {
+                Bot.getInstance(Settings.selfId).getFriend(id)!!.sendMessage(message)
+            }catch (e: Exception){
+            }
         }
     }
 }

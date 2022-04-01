@@ -24,7 +24,7 @@ object XiaoXiang : KotlinPlugin(
     JvmPluginDescription(
         id = "org.operacon.xiaoXiang",
         name = "XiaoXiang",
-        version = "0.2-DEBUG",
+        version = "0.3-DEBUG",
     )
 ) {
     override fun onEnable() {

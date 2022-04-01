@@ -103,6 +103,7 @@
 #### 通用
 
 - 聊天机器人。（详见配置文件）
+    - 当然，需要自备聊天机器人。推荐使用 [GPT2-chitchat](https://github.com/yangjianxin1/GPT2-chitchat) 并写一个 web api （TODO：开源我写的）。
     - 群聊中，键入以 `。` 开头的（可在配置文件中定制）的句子以和 bot 聊天。
     - 积极群。一切消息转发给 bot 以维持语境，但 bot 仅有给定概率回复。
 
