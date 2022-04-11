@@ -17,6 +17,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import org.operacon.XiaoXiang
 import org.operacon.bean.GlobalVars.atReplace
 import org.operacon.bean.GlobalVars.pagReplace
+import org.operacon.service.GroupCountService.botCount
 import org.operacon.service.GroupCountService.repeatCache
 import java.io.IOException
 import kotlin.random.Random
@@ -28,7 +29,7 @@ object ChatBot {
     suspend fun groupScan(event: GroupMessageEvent): Boolean {
         if (!Chat.enableForGroups and !Chat.enableActiveGroups)
             return false
-        if (repeatCache.containsKey(event.sender.id) && repeatCache[event.sender.id]!!.contentEquals(
+        if (repeatCache.containsKey(event.group.id) && repeatCache[event.group.id]!!.contentEquals(
                 event.message,
                 ignoreCase = false, strict = true
             )
@@ -73,7 +74,9 @@ object ChatBot {
 
     private suspend fun groupSendMessage(text: String, event: GroupMessageEvent) {
         val split = text.split(Chat.multiSplit)
-        for (i in split)
+        for (i in split){
+            botCount(event)
             event.group.sendMessage(i)
+        }
     }
 }
