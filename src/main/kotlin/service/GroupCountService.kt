@@ -39,6 +39,10 @@ object GroupCountService {
             imageCounter[event.group.id] = (imageCounter[event.group.id] ?: 0) + 1
     }
 
+    fun botCount(event: GroupMessageEvent) {
+        messageCounter[event.group.id] = (messageCounter[event.group.id] ?: 0) + 1
+    }
+
     fun noneBotCount(event: GroupMessageEvent) {
         noneBotCounter[event.group.id] = (noneBotCounter[event.group.id] ?: 0) + 1
     }
@@ -53,6 +57,7 @@ object GroupCountService {
             if (repeatState[event.group.id]!!)
                 return true
             event.group.sendMessage(event.message)
+            botCount(event)
             repeatState[event.group.id] = true
             return true
         }
