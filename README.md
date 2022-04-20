@@ -83,6 +83,8 @@
 - 评价。发送 `评价一下 [any]` 让 bot 评价一下。
 - 摆烂。发送 `摆烂额度` 查询额度，在任何 bot 存在的群里发言都会累加。发送 `睡大觉` 或者 `摆烂` 触发。可在配置文件中定制。
 - 统计。每天零点发送前一天发言数目（若不为 0 ）。
+- 词云。见 WordCloud 目录，请自行另外部署运行。在上述统计信息发送后发送，通过 [pkuseg](https://github.com/lancopku/pkuseg-python) 进行分词后通过 wordcloud 
+  进行绘制。可在配置文件中定制。
 
 #### 私聊
 
@@ -140,3 +142,8 @@
       Scheduler.friendMessage`。如有类似的需要 suspend 的函数，可参照这两个方法使用协程
     - 在上述 object 中添加用于描述的 `jobDetail` 和使用 Cron 表达式确定任务在何时执行的 `trigger`
     - 在 org.operacon.bean.Scheduler 的 `registerJobs()` 中插入对上述 object 的 `register()` 的调用
+
+#### 增加新的配置文件
+
+- 在 bean/Config.kt 下仿照已有的新建一个 object，修改其 SaveName 并添加属性
+- 在 service/MasterService，在函数 `reloadConfig()` 下添加新增配置文件的 `reload()`

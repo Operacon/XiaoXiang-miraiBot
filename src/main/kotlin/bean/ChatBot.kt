@@ -23,8 +23,8 @@ import java.io.IOException
 import kotlin.random.Random
 
 object ChatBot {
-    private val client = OkHttpClient().newBuilder().build()
-    private val mediaType = "text/plain".toMediaTypeOrNull()
+    val client = OkHttpClient().newBuilder().build()
+    val mediaType = "text/plain".toMediaTypeOrNull()
 
     suspend fun groupScan(event: GroupMessageEvent): Boolean {
         if (!Chat.enableForGroups and !Chat.enableActiveGroups)

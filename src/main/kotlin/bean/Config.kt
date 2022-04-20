@@ -88,3 +88,11 @@ object Chat : ReadOnlyPluginConfig("ChatBot") {
     @ValueDescription("设置 ChatBot 单次发送多条消息的分隔符")
     val multiSplit by value("[SEP]")
 }
+
+object WordCloud : ReadOnlyPluginConfig("WordCloud") {
+    @ValueDescription("设置是否打开每日词云，和每日统计一起发送，生成可能非常消耗算力")
+    val enableWordCloud by value(false)
+
+    @ValueDescription("设置请求词云的地址，参考 README")
+    val url by value("http://localhost:6785/wc")
+}
