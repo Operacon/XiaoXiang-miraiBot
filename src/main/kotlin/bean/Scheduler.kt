@@ -30,7 +30,7 @@ object Scheduler {
         launch(Dispatchers.Unconfined) {
             try {
                 Bot.getInstance(Settings.selfId).getGroup(id)!!.sendMessage(message)
-            }catch (e: Exception){
+            } catch (e: Exception) {
             }
         }
     }
@@ -39,7 +39,7 @@ object Scheduler {
         launch(Dispatchers.Unconfined) {
             try {
                 Bot.getInstance(Settings.selfId).getFriend(id)!!.sendMessage(message)
-            }catch (e: Exception){
+            } catch (e: Exception) {
             }
         }
     }

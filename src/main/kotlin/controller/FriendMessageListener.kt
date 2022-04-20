@@ -17,8 +17,7 @@ class FriendMessageListener(private val event: FriendMessageEvent) {
     suspend fun monitor() {
         val content = event.message.content.trim()
         val split = content.split(GlobalVars.splitter)
-        if(SpecialReg.scan(event, split)) return
-
-        if(MasterService.scan(event, split)) return
+        if (SpecialReg.scan(event, split)) return
+        if (MasterService.scan(event, split)) return
     }
 }

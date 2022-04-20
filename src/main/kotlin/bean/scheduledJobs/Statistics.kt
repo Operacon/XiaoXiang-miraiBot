@@ -25,6 +25,7 @@ class Statistics : Job {
                             if (GroupCountService.noneBotCounter[i]!! == GroupCountService.messageCounter[i]!!) "~"
                             else "~\n小湘发言 ${GroupCountService.messageCounter[i]!! - GroupCountService.noneBotCounter[i]!!} 条~"
                 )
+                GroupCountService.sendWordCloud(i)
                 GroupCountService.messageCounter[i] = 0
                 GroupCountService.imageCounter[i] = 0
                 GroupCountService.noneBotCounter[i] = 0

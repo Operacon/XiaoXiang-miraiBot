@@ -24,7 +24,7 @@ import kotlin.random.Random
 
 object ChatBot {
     val client = OkHttpClient().newBuilder().build()
-    private val mediaType = "text/plain".toMediaTypeOrNull()
+    val mediaType = "text/plain".toMediaTypeOrNull()
 
     suspend fun groupScan(event: GroupMessageEvent): Boolean {
         if (!Chat.enableForGroups and !Chat.enableActiveGroups)
@@ -74,7 +74,7 @@ object ChatBot {
 
     private suspend fun groupSendMessage(text: String, event: GroupMessageEvent) {
         val split = text.split(Chat.multiSplit)
-        for (i in split){
+        for (i in split) {
             botCount(event)
             event.group.sendMessage(i)
         }

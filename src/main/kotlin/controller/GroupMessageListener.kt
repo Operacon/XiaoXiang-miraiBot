@@ -18,7 +18,7 @@ class GroupMessageListener(private val event: GroupMessageEvent) {
     suspend fun monitor() {
         val content = event.message.content.trim()
         val split = content.split(GlobalVars.splitter)
-        GroupCountService.count(event)
+        GroupCountService.count(event, content)
         if (GroupCountService.hello(event, split)) return
         if (DrawLots.scan(event, split)) return
         if (Bai.scan(event, split)) return
