@@ -69,7 +69,9 @@ object ChatBot {
         val request = Request.Builder().url(path.plus("?text=").plus(text)).method(Chat.method, body).build()
         val response = client.newCall(request).execute()
         if (response.code != 200 || response.body == null) throw IOException()
-        return response.body!!.string()
+        val res = response.body!!.string()
+        response.body!!.close()
+        return res
     }
 
     private suspend fun groupSendMessage(text: String, event: GroupMessageEvent) {
