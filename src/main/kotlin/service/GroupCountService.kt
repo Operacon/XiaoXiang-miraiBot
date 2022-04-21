@@ -97,6 +97,7 @@ object GroupCountService {
                     val response = ChatBot.client.newCall(request).execute()
                     if (response.code != 200 || response.body == null) throw IOException()
                     Bot.getInstance(Settings.selfId).getGroup(id)!!.sendImage(response.body!!.byteStream())
+                    response.body!!.close()
                     chatLog[id]!!.clear()
                 }
             } catch (e: Exception) {
