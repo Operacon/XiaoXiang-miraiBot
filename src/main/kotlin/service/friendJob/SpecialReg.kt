@@ -84,8 +84,10 @@ object SpecialReg {
             .method("POST", body)
             .addHeader("Content-Type", "application/json")
             .build()
-        val response = ChatBot.client.newCall(request).execute().body?.string()
-        if (response == null || response == "0")
+        val response = ChatBot.client.newCall(request).execute()
+        val res = response.body?.string()
+        response.body?.close()
+        if (res == null || res == "0")
             return false
         return true
     }
