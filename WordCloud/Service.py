@@ -24,9 +24,8 @@ wc = wordcloud.WordCloud(width=1344, height=2772, background_color='white',
 
 
 def geneImg(t):
-    global maxT
     lis = seg.cut(t)
-    maxT = min(maxT, lis.__len__())
+    maxN = min(maxT, lis.__len__())
     dic = {}
     res = {}
     j = 0
@@ -39,9 +38,9 @@ def geneImg(t):
     for i in dic.keys():
         if(i in sw):
             continue
-        res[i] = dic[i] / lis.__len__() * maxT
+        res[i] = dic[i] / lis.__len__() * maxN
         j = j + 1
-        if j == maxT:
+        if j == maxN:
             break
     b = io.BytesIO()
     wc.generate_from_frequencies(res)

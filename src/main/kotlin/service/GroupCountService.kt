@@ -18,6 +18,7 @@ import net.mamoe.mirai.message.data.Message
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.operacon.bean.ChatBot
+import org.operacon.bean.GlobalVars
 import org.operacon.bean.Settings
 import org.operacon.bean.WordCloud
 import java.io.IOException
@@ -54,7 +55,8 @@ object GroupCountService {
         if (WordCloud.enableWordCloud) {
             if (chatLog[event.group.id] == null)
                 chatLog[event.group.id] = StringBuilder()
-            chatLog[event.group.id]!!.append(' ').append(text)
+            chatLog[event.group.id]!!.append(' ')
+                .append(text.replace(GlobalVars.pagReplace, "").replace(GlobalVars.atReplace, ""))
         }
     }
 
