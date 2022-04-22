@@ -30,6 +30,7 @@ class Statistics : Job {
                 GroupCountService.imageCounter[i] = 0
                 GroupCountService.noneBotCounter[i] = 0
             } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }

@@ -12,7 +12,11 @@ import wordcloud
 seg = pkuseg.pkuseg(user_dict="./reserved.txt")
 
 # 配置不在词云中出现的 stopwords
-sw = ["我", "的", "了", "在", "到", "草", "不", "，", "。", "、"]
+sw = []
+with open("stopwords.txt", "r", encoding="UTF-8") as swFile:
+    def rl(x):
+        return str.strip(x)
+    sw = list(map(rl, swFile.readlines()))
 
 # 配置传入词云前多少个最常出现的词（用于改善性能）
 maxT = 20
@@ -31,7 +35,7 @@ def geneImg(t):
     j = 0
     for i in lis:
         if(dic.get(i) == None):
-            dic[i] = 0
+            dic[i] = 1
         else:
             dic[i] = dic[i] + 1
     dic = dict(sorted(dic.items(), key=lambda x: x[1], reverse=True))
