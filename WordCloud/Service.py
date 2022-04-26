@@ -19,7 +19,7 @@ with open("stopwords.txt", "r", encoding="UTF-8") as swFile:
     sw = list(map(rl, swFile.readlines()))
 
 # 配置传入词云前多少个最常出现的词（用于改善性能）
-maxT = 20
+maxT = 25
 
 # 使用 wordcloud 进行绘制，注意传入的参数，可自己定制外观
 #       此处必须指定系统安装的含有简中的字体，或者放进本目录
