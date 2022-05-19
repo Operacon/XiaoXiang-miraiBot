@@ -5,11 +5,15 @@
 import io
 import pkuseg
 import wordcloud
-
+import imageio
+import re
 
 # 使用 pkuseg 进行分词，由于一天一个群的聊天记录规模不算太大，单进程可以接受
 #       此处可以在同目录下的 reserved.txt 定制不会被拆分的词组
 seg = pkuseg.pkuseg(user_dict="./reserved.txt")
+
+mask = imread("comment.png")
+colors = wordcloud.ImageColorGenerator(mask)
 
 # 配置不在词云中出现的 stopwords
 sw = []
@@ -23,11 +27,14 @@ maxT = 25
 
 # 使用 wordcloud 进行绘制，注意传入的参数，可自己定制外观
 #       此处必须指定系统安装的含有简中的字体，或者放进本目录
-wc = wordcloud.WordCloud(width=1344, height=2772, background_color='white',
-                         font_path="simkai.ttf")
-
+#wc = wordcloud.WordCloud(width=1344, height=2772, background_color='white',font_path="simkai.ttf")
+wc = wordcloud.WordCloud(width=1921,height=1447,background_color='white', mask=mask, color_func=colors, font_path="simkai.ttf")
 
 def geneImg(t):
+    #去除url链接
+    urlRe = re.compile(r"[a-zA-z]+://[^\s]*")
+    t = re.sub(urlRe, "", t)
+    
     lis = seg.cut(t)
     maxN = min(maxT, lis.__len__())
     dic = {}
