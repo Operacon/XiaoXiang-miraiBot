@@ -12,11 +12,13 @@ import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.event.GlobalEventChannel
 import net.mamoe.mirai.event.events.FriendMessageEvent
 import net.mamoe.mirai.event.events.GroupMessageEvent
+import net.mamoe.mirai.event.events.NudgeEvent
 import net.mamoe.mirai.utils.error
 import net.mamoe.mirai.utils.info
 import org.operacon.component.Scheduler
 import org.operacon.controller.FriendMessageListener
 import org.operacon.controller.GroupMessageListener
+import org.operacon.controller.NudgeListener
 import org.operacon.service.MasterService
 import java.lang.Exception
 
@@ -30,6 +32,7 @@ object XiaoXiang : KotlinPlugin(
     override fun onEnable() {
         GlobalEventChannel.subscribeAlways<GroupMessageEvent> { event -> GroupMessageListener(event).monitor() }
         GlobalEventChannel.subscribeAlways<FriendMessageEvent> { event -> FriendMessageListener(event).monitor() }
+        GlobalEventChannel.subscribeAlways<NudgeEvent> { event -> NudgeListener(event).monitor() }
 
         try {
             MasterService.reloadConfig()
