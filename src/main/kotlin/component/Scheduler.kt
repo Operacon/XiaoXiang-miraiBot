@@ -5,14 +5,14 @@
  *
  * https://github.com/Operacon/XiaoXiang-miraiBot/blob/main/LICENSE
  */
-package org.operacon.bean
+package org.operacon.component
 
+import org.operacon.component.scheduledJobs.StatisticsHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import net.mamoe.mirai.Bot
 import org.quartz.impl.StdSchedulerFactory
-import org.operacon.bean.scheduledJobs.*
 import org.quartz.Scheduler
 
 object Scheduler {

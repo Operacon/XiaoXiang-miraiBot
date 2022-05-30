@@ -17,10 +17,9 @@ import net.mamoe.mirai.message.data.Image
 import net.mamoe.mirai.message.data.Message
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
-import org.operacon.bean.ChatBot
-import org.operacon.bean.GlobalVars
-import org.operacon.bean.Settings
-import org.operacon.bean.WordCloud
+import org.operacon.component.GlobalVars
+import org.operacon.component.Settings
+import org.operacon.component.WordCloud
 import java.io.IOException
 
 object GroupCountService {
@@ -52,7 +51,7 @@ object GroupCountService {
         baiCounter[event.sender.id] = (baiCounter[event.sender.id] ?: 23) + 1
         if (event.message[Image] != null)
             imageCounter[event.group.id] = (imageCounter[event.group.id] ?: 0) + 1
-        if (WordCloud.enableWordCloud) {
+        if (WordCloud.enableWordCloud && text.length <= 140) {
             if (chatLog[event.group.id] == null)
                 chatLog[event.group.id] = StringBuilder()
             chatLog[event.group.id]!!.append(' ')
@@ -91,9 +90,9 @@ object GroupCountService {
         launch(Dispatchers.Unconfined) {
             try {
                 if (WordCloud.enableWordCloud) {
-                    val body = chatLog[id]!!.toString().toRequestBody(ChatBot.mediaType)
+                    val body = chatLog[id]!!.toString().toRequestBody(GlobalVars.mediaTypePlain)
                     val request = Request.Builder().url(WordCloud.url).method("POST", body).build()
-                    val response = ChatBot.client.newCall(request).execute()
+                    val response = GlobalVars.okHttpClient.newCall(request).execute()
                     if (response.code != 200 || response.body == null) throw IOException()
                     Bot.getInstance(Settings.selfId).getGroup(id)!!.sendImage(response.body!!.byteStream())
                     response.body!!.close()

@@ -5,26 +5,23 @@
  *
  * https://github.com/Operacon/XiaoXiang-miraiBot/blob/main/LICENSE
  */
-package org.operacon.bean
+package org.operacon.service
 
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.content
 import net.mamoe.mirai.utils.error
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.operacon.XiaoXiang
-import org.operacon.bean.GlobalVars.atReplace
-import org.operacon.bean.GlobalVars.pagReplace
+import org.operacon.component.Chat
+import org.operacon.component.GlobalVars
+import org.operacon.component.GlobalVars.atMe
 import org.operacon.service.GroupCountService.botCount
 import org.operacon.service.GroupCountService.repeatCache
 import java.io.IOException
 import kotlin.random.Random
 
-object ChatBot {
-    val client = OkHttpClient().newBuilder().build()
-    val mediaType = "text/plain".toMediaTypeOrNull()
+object ChatBotService {
 
     suspend fun groupScan(event: GroupMessageEvent): Boolean {
         if (!Chat.enableForGroups and !Chat.enableActiveGroups)
@@ -35,12 +32,17 @@ object ChatBot {
             )
         )
             return false
-        var text = event.message.content.trim().replace(pagReplace, "").replace(atReplace, "")
+        var text = event.message.content.trim()
+        var called = text.contains(atMe)
+        text = text.replace(GlobalVars.pagReplace, "").replace(GlobalVars.atReplace, "")
         if (text == "")
             return false
         try {
             if (text.startsWith(Chat.groupKeyword)) {
                 text = text.removeRange(0, Chat.groupKeyword.length)
+                called = true
+            }
+            if (called) {
                 if (Chat.enableForGroups) {
                     if (Chat.enableActiveGroups and (event.group.id in Chat.activeGroups))
                         groupSendMessage(chat(text, Chat.url[Chat.activeGroups.indexOf(event.group.id)]), event)
@@ -65,9 +67,11 @@ object ChatBot {
     }
 
     private fun chat(text: String, path: String): String {
-        val body = "".toRequestBody(mediaType)
+        if (text.length >= 140)
+            return "一句话说那么长不会喘不过气吗"
+        val body = "".toRequestBody(GlobalVars.mediaTypePlain)
         val request = Request.Builder().url(path.plus("?text=").plus(text)).method(Chat.method, body).build()
-        val response = client.newCall(request).execute()
+        val response = GlobalVars.okHttpClient.newCall(request).execute()
         if (response.code != 200 || response.body == null) throw IOException()
         val res = response.body!!.string()
         response.body!!.close()

@@ -14,7 +14,7 @@ import net.mamoe.mirai.event.events.FriendMessageEvent
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.utils.error
 import net.mamoe.mirai.utils.info
-import org.operacon.bean.Scheduler
+import org.operacon.component.Scheduler
 import org.operacon.controller.FriendMessageListener
 import org.operacon.controller.GroupMessageListener
 import org.operacon.service.MasterService

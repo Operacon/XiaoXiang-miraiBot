@@ -55,7 +55,10 @@ object DrawLots {
             return true
         }
         if (split[0] == "评价一下") {
-            when (Random.nextInt(0, 8)) {
+            when (if (split.size == 1)
+                Random.nextInt(0, 8)
+            else
+                split[1].hashCode() % 8) {
                 0 -> event.group.sendMessage("鉴定为烂")
                 1 -> event.group.sendMessage("我觉得好")
                 2 -> event.group.sendMessage("小湘觉得不怎么样")

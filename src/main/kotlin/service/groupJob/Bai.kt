@@ -12,7 +12,7 @@ import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.At
 import net.mamoe.mirai.message.data.Face
 import net.mamoe.mirai.message.data.buildMessageChain
-import org.operacon.bean.Bai
+import org.operacon.component.Bai
 import org.operacon.service.GroupCountService
 import kotlin.random.Random
 
