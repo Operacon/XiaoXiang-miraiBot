@@ -10,6 +10,7 @@ package org.operacon.component.scheduledJobs
 import org.operacon.component.Scheduler.groupMessage
 import org.operacon.component.Scheduler.quartzScheduler
 import org.operacon.service.GroupCountService
+import org.operacon.service.groupJob.DrawLots
 import org.quartz.*
 
 class Statistics : Job {
@@ -29,6 +30,7 @@ class Statistics : Job {
                 GroupCountService.messageCounter[i] = 0
                 GroupCountService.imageCounter[i] = 0
                 GroupCountService.noneBotCounter[i] = 0
+                DrawLots.limitMap.clear()
             } catch (e: Exception) {
                 e.printStackTrace()
             }

@@ -83,6 +83,7 @@
 - 概率。发送 `概率 <sentence>` 求解概率，其结果保留 30 min 不变。
 - 决定。发送 `决定 <object0> <object1> ... <objectn>` 让 bot 帮选一项。
 - 评价。发送 `评价一下 [any]` 让 bot 评价一下。
+- 每日调用限额。在配置文件中可配置要开启限额的群，以及每天的限制调用数，用来防止 bot 严重降低群聊天信息量。除 hello 和复读外，仅上述功能扣除调用数。
 - 摆烂。发送 `摆烂额度` 查询额度，在任何 bot 存在的群里发言都会累加。发送 `睡大觉` 或者 `摆烂` 触发。可在配置文件中定制。
 - 统计。每天零点发送前一天发言数目（若不为 0 ）。
 - 词云。见 WordCloud 目录，请自行另外部署运行。在上述统计信息发送后发送，通过 [pkuseg](https://github.com/lancopku/pkuseg-python) 进行分词后通过 wordcloud
@@ -125,7 +126,7 @@
 
 ### 开发提示
 
-#### 增加新的功能
+#### 增加新的聊天功能
 
 以增加群聊功能为例
 
@@ -149,3 +150,8 @@
 
 - 在 component/Config.kt 下仿照已有的新建一个 object，修改其 SaveName 并添加属性
 - 在 service/MasterService，在函数 `reloadConfig()` 下添加新增配置文件的 `reload()`
+
+#### 监听其他事件
+
+- 在 controller/ 下新建构造参数包含该种 event 的 listener，其包含一个 monitor() 函数用于处理该 event
+- 在 XiaoXiang.kt 中 使用 GlobalEventChannel.subscribeAlways 注册 listener

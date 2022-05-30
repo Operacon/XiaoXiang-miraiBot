@@ -32,6 +32,12 @@ object Settings : ReadOnlyPluginConfig("Settings") {
 
     @ValueDescription("设置特殊服务信息保存文件的绝对路径")
     val pathSpecialService by value("C:/Users/Public/specialData.txt")
+
+    @ValueDescription("在下列群中应用每人每天的调用限额")
+    val limitedGroups by value(mutableListOf<Long>(114514))
+
+    @ValueDescription("每人每天最多调用 bot 的次数")
+    val callLimit by value(10)
 }
 
 object Bai : ReadOnlyPluginConfig("BaiLan") {
