@@ -5,11 +5,12 @@
  *
  * https://github.com/Operacon/XiaoXiang-miraiBot/blob/main/LICENSE
  */
-package org.operacon.bean
+package org.operacon.component
 
 import net.mamoe.mirai.console.data.ReadOnlyPluginConfig
 import net.mamoe.mirai.console.data.ValueDescription
 import net.mamoe.mirai.console.data.value
+import org.operacon.component.Chat.provideDelegate
 
 object Settings : ReadOnlyPluginConfig("Settings") {
     @ValueDescription("设置此 bot 的 qq 号")
@@ -32,6 +33,15 @@ object Settings : ReadOnlyPluginConfig("Settings") {
 
     @ValueDescription("设置特殊服务信息保存文件的绝对路径")
     val pathSpecialService by value("C:/Users/Public/specialData.txt")
+
+    @ValueDescription("在下列群中应用每人每天的调用限额")
+    val limitedGroups by value(mutableListOf<Long>(114514))
+
+    @ValueDescription("每人每天最多调用 bot 的次数")
+    val callLimit by value(10)
+
+    @ValueDescription("对戳一戳，bot 跟戳的概率")
+    val nudgeProb by value(0.1)
 }
 
 object Bai : ReadOnlyPluginConfig("BaiLan") {

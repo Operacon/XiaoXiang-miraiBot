@@ -5,16 +5,17 @@
  *
  * https://github.com/Operacon/XiaoXiang-miraiBot/blob/main/LICENSE
  */
-package org.operacon.bean.scheduledJobs
+package org.operacon.component.scheduledJobs
 
-import org.operacon.bean.Scheduler.groupMessage
-import org.operacon.bean.Scheduler.quartzScheduler
+import org.operacon.component.Scheduler.groupMessage
+import org.operacon.component.Scheduler.quartzScheduler
 import org.operacon.service.GroupCountService
+import org.operacon.service.groupJob.DrawLots
 import org.quartz.*
 
 class Statistics : Job {
     override fun execute(context: JobExecutionContext?) {
-        // 在此处添加应当执行的任务体。使用 org.operacon.bean.Scheduler.friendMessage 和 groupMessage 发送消息
+        // 在此处添加应当执行的任务体。使用 org.operacon.component.Scheduler.friendMessage 和 groupMessage 发送消息
         for (i: Long in GroupCountService.messageCounter.keys) {
             try {
                 if (GroupCountService.messageCounter[i]!! == 0)
@@ -29,7 +30,9 @@ class Statistics : Job {
                 GroupCountService.messageCounter[i] = 0
                 GroupCountService.imageCounter[i] = 0
                 GroupCountService.noneBotCounter[i] = 0
+                DrawLots.limitMap.clear()
             } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }

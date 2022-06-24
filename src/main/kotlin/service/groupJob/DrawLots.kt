@@ -8,16 +8,28 @@
 package org.operacon.service.groupJob
 
 import net.mamoe.mirai.event.events.GroupMessageEvent
+import net.mamoe.mirai.message.data.At
 import net.mamoe.mirai.message.data.MessageSource.Key.quote
+import org.operacon.component.Settings
 import java.time.LocalDateTime
 import java.util.function.Predicate
 import kotlin.random.Random
 
 object DrawLots {
     val sentMap: HashMap<Long, MutableList<Lot>> = HashMap()
+    val limitMap: HashMap<Long, Int> = HashMap()
 
     suspend fun scan(event: GroupMessageEvent, split: List<String>): Boolean {
+        var limited: Boolean = false
+        if (event.group.id in Settings.limitedGroups) {
+            // 此处用于调用限额
+            limitMap[event.sender.id] = (limitMap[event.sender.id] ?: 0) + 1
+            if (limitMap[event.sender.id]!! >= 11)
+                limited = true
+        }
+
         if (split[0] == "求签") {
+            if (limit(event, limited)) return true
             if (split.size == 1) {
                 event.group.sendMessage(event.message.quote() + "所以想求什么呢")
                 return true
@@ -29,6 +41,7 @@ object DrawLots {
             return true
         }
         if (split[0] == "概率") {
+            if (limit(event, limited)) return true
             if (split.size == 1) {
                 event.group.sendMessage(event.message.quote() + "所以想算什么呢")
                 return true
@@ -40,6 +53,7 @@ object DrawLots {
             return true
         }
         if (split[0] == "决定") {
+            if (limit(event, limited)) return true
             val s = split.drop(1).distinct()
             if (split.size == 1) {
                 event.group.sendMessage(event.message.quote() + "所以想决定什么呢")
@@ -55,7 +69,11 @@ object DrawLots {
             return true
         }
         if (split[0] == "评价一下") {
-            when (Random.nextInt(0, 8)) {
+            if (limit(event, limited)) return true
+            when (if (split.size == 1)
+                Random.nextInt(0, 8)
+            else
+                split[1].hashCode() % 8) {
                 0 -> event.group.sendMessage("鉴定为烂")
                 1 -> event.group.sendMessage("我觉得好")
                 2 -> event.group.sendMessage("小湘觉得不怎么样")
@@ -67,7 +85,25 @@ object DrawLots {
             }
             return true
         }
+
+        if (event.group.id in Settings.limitedGroups)
+        // 此处用于恢复调用限额
+            limitMap[event.sender.id] = limitMap[event.sender.id]!! - 1
+
         return false
+    }
+
+    suspend fun limit(event: GroupMessageEvent, limited: Boolean): Boolean {
+        if (limited)
+            event.group.sendMessage(
+                At(event.sender) + (when (Random.nextInt(0, 3)) {
+                    0 -> "汝今日天机已尽，明日再来"
+                    1 -> "今日毕矣"
+                    2 -> "一天玩这么多次对群不好~"
+                    else -> ""
+                }).toString()
+            )
+        return limited
     }
 }
 

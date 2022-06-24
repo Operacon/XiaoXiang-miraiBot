@@ -13,9 +13,9 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import org.operacon.bean.ChatBot
-import org.operacon.bean.Settings.enableSpecialService
-import org.operacon.bean.Settings.pathSpecialService
+import org.operacon.component.GlobalVars
+import org.operacon.component.Settings.enableSpecialService
+import org.operacon.component.Settings.pathSpecialService
 import java.io.File
 
 object SpecialReg {
@@ -24,12 +24,13 @@ object SpecialReg {
 
     suspend fun scan(event: FriendMessageEvent, split: List<String>): Boolean {
         if (!enableSpecialService) return false
-        if (split[0] == "帮小忙干大事") {
+        if (split[0] == "天天打卡好累啊") {
             susSet.add(event.sender.id)
             event.sender.sendMessage("收到，但是我需要学号和密码~")
-            event.sender.sendMessage("决定好了的话，你下条消息的格式应该是：\\n“\\\\s;;;\\\\s”\\n即用连续三个英文分号连接的两个字符串，第一个学号，第二个密码")
-            event.sender.sendMessage("请注意：格式错了可以重发，但是如果学号密码打错了，会造成不小麻烦。。")
-            event.sender.sendMessage("另外我目前只能定位到 北京市海淀区")
+            event.sender.sendMessage("决定好了的话，你下条消息的格式应该是：\n“\\s;;;\\s”\n即用连续三个英文分号连接的两个字符串，第一个学号，第二个密码")
+            event.sender.sendMessage("请注意：格式错了可以重发，但是如果学号密码打错了，会有点麻烦。。")
+            event.sender.sendMessage("我会使用你前一天的信息，如果你信息变了，应该在下午五点前手动打！")
+            event.sender.sendMessage("只是测试使用，一切后果由你本人承担！")
             return true
         }
         if (split[0].matches(pat) and susSet.contains(event.sender.id)) {
@@ -43,7 +44,7 @@ object SpecialReg {
                 }
                 File(pathSpecialService).appendText("${event.sender.id}\t${id}\t${pwd};;;")
                 susSet.remove(event.sender.id)
-                event.sender.sendMessage("学号 ${id}\n密码 $pwd")
+                event.sender.sendMessage("学号 $id")
                 event.sender.sendMessage("记住了，每天五点多会尽量帮你的~")
                 return true
             } catch (e: Exception) {
@@ -80,11 +81,11 @@ object SpecialReg {
         val mediaType: MediaType = "application/json".toMediaType()
         val body: RequestBody = "{\"id\":\"${id}\",\"pwd\":\"${pwd}\"}".toRequestBody(mediaType)
         val request: Request = Request.Builder()
-            .url("http://localhost:20012/dk")
+            .url("http://localhost:6785/dk")
             .method("POST", body)
             .addHeader("Content-Type", "application/json")
             .build()
-        val response = ChatBot.client.newCall(request).execute()
+        val response = GlobalVars.okHttpClient.newCall(request).execute()
         val res = response.body?.string()
         response.body?.close()
         if (res == null || res == "0")

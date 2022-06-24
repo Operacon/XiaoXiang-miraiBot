@@ -11,10 +11,10 @@ import net.mamoe.mirai.Bot
 import net.mamoe.mirai.contact.isBotMuted
 import net.mamoe.mirai.event.events.FriendMessageEvent
 import org.operacon.XiaoXiang.reload
-import org.operacon.bean.Bai
-import org.operacon.bean.Chat
-import org.operacon.bean.Settings
-import org.operacon.bean.WordCloud
+import org.operacon.component.Bai
+import org.operacon.component.Chat
+import org.operacon.component.Settings
+import org.operacon.component.WordCloud
 
 object MasterService {
     private val groupMap = HashMap<String, Long>()

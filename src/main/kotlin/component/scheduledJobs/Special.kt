@@ -5,11 +5,11 @@
  *
  * https://github.com/Operacon/XiaoXiang-miraiBot/blob/main/LICENSE
  */
-package org.operacon.bean.scheduledJobs
+package org.operacon.component.scheduledJobs
 
-import org.operacon.bean.Scheduler.friendMessage
-import org.operacon.bean.Scheduler.quartzScheduler
-import org.operacon.bean.Settings
+import org.operacon.component.Scheduler.friendMessage
+import org.operacon.component.Scheduler.quartzScheduler
+import org.operacon.component.Settings
 import org.operacon.service.friendJob.SpecialReg.dk
 import org.quartz.*
 import java.io.File
@@ -30,32 +30,7 @@ class Dk : Job {
             } catch (e: Exception) {
                 e.printStackTrace()
                 failList.add(i)
-                friendMessage(ii[0].toLong(),"好像代码出了问题，自己打卡吧")
-            }
-        }
-        for (i in failList) {
-            if (i == "")
-                continue
-            val ii = i.split("\t")
-            try {
-                if (dk(ii[1], ii[2])) {
-                    friendMessage(ii[0].toLong(), "今天帮你打了卡哦")
-                    failList.remove(i)
-                }
-            } catch (e: Exception) {
-                continue
-            }
-        }
-        for (i in failList) {
-            if (i == "")
-                continue
-            val ii = i.split("\t")
-            try {
-                if (dk(ii[1], ii[2]))
-                    friendMessage(ii[0].toLong(), "今天帮你打了卡哦")
-            } catch (e: Exception) {
-                friendMessage(ii[0].toLong(), "试了三遍都没打上卡，你自己打吧")
-                continue
+                friendMessage(ii[0].toLong(), "没打上，自己试试？")
             }
         }
     }
@@ -65,9 +40,10 @@ object DkHandler {
     // 描述定时任务
     private val jobDetail: JobDetail = JobBuilder.newJob(Dk::class.java)
         .withDescription("每天下午五点打卡").build()
+
     // 使用 Cron 表达式确定该任务应该如何执行
     private val trigger: CronTrigger = TriggerBuilder.newTrigger()
-        .withSchedule(CronScheduleBuilder.cronSchedule("45 0 17 * * ?")).build()
+        .withSchedule(CronScheduleBuilder.cronSchedule("30 0 17 * * ?")).build()
 
     fun register() {
         quartzScheduler.scheduleJob(jobDetail, trigger)

@@ -30,7 +30,7 @@
     To contact the author, E-Mail <operacon@outlook.com>
 ```
 
-`潇小湘` 仅以学习和娱乐为目的进行开发。尝试对此类机器人进行一定架构，使得项目更加清晰，便于定制、添加功能和二次开发。同时为像作者一样基础一般的开发者服务。
+`潇小湘` 仅以学习和娱乐为目的进行开发。尝试对此类机器人进行一定架构，使得项目更加清晰，便于定制、添加功能和二次开发；同时为像作者一样基础一般的开发者服务。
 
 ----
 
@@ -38,7 +38,7 @@
 
 ```
     kotlin
-    |-------bean
+    |-------component
     |       |-------项目中用到的全局单例、配置文件以及其他 bean
     |
     |-------controller
@@ -63,11 +63,13 @@
                 scan() 发现不调用自己，return false
             ...
             listener 将预处理的文本发给其中第 n 个 service 的 scan() 函数
-                scan() 发现调用自己，进行相应的业务逻辑的处理（处理中可能用到 bean），return true
+                scan() 发现调用自己，进行相应的业务逻辑的处理（处理中可能用到 component），return true
             listener 发现本条消息处理完毕或者没有触发任何一个 service，return
         monitor() 函数结束
     event 处理结束    
 ```
+
+一条消息在同一插件里触发多个功能可能导致混乱，按如上所示的逻辑，保证了一条消息至多触发一个功能。
 
 ----
 
@@ -81,9 +83,10 @@
 - 概率。发送 `概率 <sentence>` 求解概率，其结果保留 30 min 不变。
 - 决定。发送 `决定 <object0> <object1> ... <objectn>` 让 bot 帮选一项。
 - 评价。发送 `评价一下 [any]` 让 bot 评价一下。
+- 每日调用限额。在配置文件中可配置要开启限额的群，以及每天的限制调用数，用来防止 bot 严重降低群聊天信息量。除 hello 和复读外，仅上述功能扣除调用数。
 - 摆烂。发送 `摆烂额度` 查询额度，在任何 bot 存在的群里发言都会累加。发送 `睡大觉` 或者 `摆烂` 触发。可在配置文件中定制。
 - 统计。每天零点发送前一天发言数目（若不为 0 ）。
-- 词云。见 WordCloud 目录，请自行另外部署运行。在上述统计信息发送后发送，通过 [pkuseg](https://github.com/lancopku/pkuseg-python) 进行分词后通过 wordcloud 
+- 词云。见 WordCloud 目录，请自行另外部署运行。在上述统计信息发送后发送，通过 [pkuseg](https://github.com/lancopku/pkuseg-python) 进行分词后通过 wordcloud
   进行绘制。可在配置文件中定制。
 
 #### 私聊
@@ -106,12 +109,12 @@
 
 - 聊天机器人。（详见配置文件）
     - 当然，需要自备聊天机器人。推荐使用 [GPT2-chitchat](https://github.com/yangjianxin1/GPT2-chitchat) 并写一个 web api （TODO：开源我写的）。
-    - 群聊中，键入以 `。` 开头的（可在配置文件中定制）的句子以和 bot 聊天。
+    - 群聊中，键入以 `。` 开头（可在配置文件中定制）的句子或者 @bot 以和 bot 聊天。
     - 积极群。一切消息转发给 bot 以维持语境，但 bot 仅有给定概率回复。
 
 - 定时任务。
-    - 见 bean/Scheduler.kt ，基于 Quartz 实现定时任务。
-    - 每个单独的 Job 应在 bean/scheduledJobs/ 下。
+    - 见 component/Scheduler.kt ，基于 Quartz 实现定时任务。
+    - 每个单独的 Job 应在 component/scheduledJobs/ 下。
 
 ----
 
@@ -125,7 +128,7 @@
 
 ### 开发提示
 
-#### 增加新的功能
+#### 增加新的聊天功能
 
 以增加群聊功能为例
 
@@ -138,14 +141,19 @@
 
 #### 增加新的定时任务
 
-- 在 bean/scheduledJobs/ 下新建一个文件，其包含一个继承了 `Job` 的 class 和一个用于包装的 object。可以参考 Statistics.kt
+- 在 component/scheduledJobs/ 下新建一个文件，其包含一个继承了 `Job` 的 class 和一个用于包装的 object。可以参考 Statistics.kt
     - 在上述 class 的 `execute(context: JobExecutionContext?)`
-      中，编写该定时任务的逻辑。如果要发送消息请使用 `import org.operacon.bean.Scheduler.groupMessage` 和 `import org.operacon.bean.
-      Scheduler.friendMessage`。如有类似的需要 suspend 的函数，可参照这两个方法使用协程
+      中，编写该定时任务的逻辑。如果要发送消息请使用 `import org.operacon.component.Scheduler.groupMessage`
+      和 `import org.operacon.component. Scheduler.friendMessage`。如有类似的需要 suspend 的函数，可参照这两个方法使用协程
     - 在上述 object 中添加用于描述的 `jobDetail` 和使用 Cron 表达式确定任务在何时执行的 `trigger`
-    - 在 org.operacon.bean.Scheduler 的 `registerJobs()` 中插入对上述 object 的 `register()` 的调用
+    - 在 org.operacon.component.Scheduler 的 `registerJobs()` 中插入对上述 object 的 `register()` 的调用
 
 #### 增加新的配置文件
 
-- 在 bean/Config.kt 下仿照已有的新建一个 object，修改其 SaveName 并添加属性
+- 在 component/Config.kt 下仿照已有的新建一个 object，修改其 SaveName 并添加属性
 - 在 service/MasterService，在函数 `reloadConfig()` 下添加新增配置文件的 `reload()`
+
+#### 监听其他事件
+
+- 在 controller/ 下新建构造参数包含该种 event 的 listener，其包含一个 monitor() 函数用于处理该 event
+- 在 XiaoXiang.kt 中 使用 GlobalEventChannel.subscribeAlways 注册 listener

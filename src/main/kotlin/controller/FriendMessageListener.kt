@@ -9,7 +9,7 @@ package org.operacon.controller
 
 import net.mamoe.mirai.event.events.FriendMessageEvent
 import net.mamoe.mirai.message.data.content
-import org.operacon.bean.GlobalVars
+import org.operacon.component.GlobalVars
 import org.operacon.service.MasterService
 import org.operacon.service.friendJob.SpecialReg
 
