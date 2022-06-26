@@ -19,7 +19,6 @@ class Dk : Job {
         // 在此处添加应当执行的任务体。使用 org.operacon.bean.Scheduler.friendMessage 和 groupMessage 发送消息
         if (!Settings.enableSpecialService) return
         val ls = File(Settings.pathSpecialService).readText().split(";;;")
-        val failList = HashSet<String>()
         for (i in ls) {
             if (i == "")
                 continue
@@ -29,7 +28,6 @@ class Dk : Job {
                     friendMessage(ii[0].toLong(), "今天帮你打了卡哦")
             } catch (e: Exception) {
                 e.printStackTrace()
-                failList.add(i)
                 friendMessage(ii[0].toLong(), "没打上，自己试试？")
             }
         }

@@ -27,7 +27,7 @@ object SpecialReg {
         if (split[0] == "天天打卡好累啊") {
             susSet.add(event.sender.id)
             event.sender.sendMessage("收到，但是我需要学号和密码~")
-            event.sender.sendMessage("决定好了的话，你下条消息的格式应该是：\n“\\s;;;\\s”\n即用连续三个英文分号连接的两个字符串，第一个学号，第二个密码")
+            event.sender.sendMessage("决定好了的话，你下条消息的格式应该是：\n\\s;;;\\s\n即用连续三个英文分号连接的两个字符串，第一个学号，第二个密码")
             event.sender.sendMessage("请注意：格式错了可以重发，但是如果学号密码打错了，会有点麻烦。。")
             event.sender.sendMessage("我会使用你前一天的信息，如果你信息变了，应该在下午五点前手动打！")
             event.sender.sendMessage("只是测试使用，一切后果由你本人承担！")
@@ -88,8 +88,8 @@ object SpecialReg {
         val response = GlobalVars.okHttpClient.newCall(request).execute()
         val res = response.body?.string()
         response.body?.close()
-        if (res == null || res == "0")
-            return false
-        return true
+        if (res == "1")
+            return true
+        return false
     }
 }
