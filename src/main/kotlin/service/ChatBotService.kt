@@ -55,7 +55,7 @@ object ChatBotService {
                     return true
                 }
             } else if (Chat.enableActiveGroups && (event.group.id in Chat.activeGroups)) {
-                text = chat(text, Chat.url[Chat.activeGroups.indexOf(event.group.id)])
+                text = chat(text, Chat.url[Chat.activeGroups.indexOf(event.group.id)], true)
                 if (Random.nextFloat() <= Chat.replyProb)
                     groupSendMessage(text, event)
             }
@@ -66,8 +66,8 @@ object ChatBotService {
         return false
     }
 
-    private fun chat(text: String, path: String): String {
-        if (text.length >= 140)
+    private fun chat(text: String, path: String, active: Boolean = false): String {
+        if ((text.length >= 140) and !active)
             return "一句话说那么长不会喘不过气吗"
         val body = "".toRequestBody(GlobalVars.mediaTypePlain)
         val request = Request.Builder().url(path.plus("?text=").plus(text)).method(Chat.method, body).build()
