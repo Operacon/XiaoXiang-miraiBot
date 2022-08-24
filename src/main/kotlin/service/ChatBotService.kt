@@ -8,6 +8,7 @@
 package org.operacon.service
 
 import net.mamoe.mirai.event.events.GroupMessageEvent
+import net.mamoe.mirai.message.data.buildMessageChain
 import net.mamoe.mirai.message.data.content
 import net.mamoe.mirai.utils.error
 import okhttp3.Request
@@ -18,6 +19,7 @@ import org.operacon.component.GlobalVars
 import org.operacon.component.GlobalVars.atMe
 import org.operacon.service.GroupCountService.botCount
 import org.operacon.service.GroupCountService.repeatCache
+import org.operacon.service.GroupCountService.repeatState
 import java.io.IOException
 import kotlin.random.Random
 
@@ -84,5 +86,7 @@ object ChatBotService {
             botCount(event)
             event.group.sendMessage(i)
         }
+        repeatCache[event.group.id] = buildMessageChain { +split.last() }
+        repeatState[event.group.id] = true
     }
 }

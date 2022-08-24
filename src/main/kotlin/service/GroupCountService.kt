@@ -14,7 +14,7 @@ import net.mamoe.mirai.Bot
 import net.mamoe.mirai.contact.Contact.Companion.sendImage
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.Image
-import net.mamoe.mirai.message.data.Message
+import net.mamoe.mirai.message.data.MessageChain
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.operacon.component.GlobalVars
@@ -27,8 +27,8 @@ object GroupCountService {
     val messageCounter = HashMap<Long, Int>()
     val imageCounter = HashMap<Long, Int>()
     val noneBotCounter = HashMap<Long, Int>()
-    val repeatCache = HashMap<Long, Message>()
-    private val repeatState = HashMap<Long, Boolean>()
+    val repeatCache = HashMap<Long, MessageChain>()
+    val repeatState = HashMap<Long, Boolean>()
     private val chatLog = HashMap<Long, StringBuilder>()
 
     suspend fun hello(event: GroupMessageEvent, split: List<String>): Boolean {
@@ -99,7 +99,7 @@ object GroupCountService {
                     response.body!!.close()
                     chatLog[id]!!.clear()
                 }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
             }
         }
     }
