@@ -7,6 +7,8 @@
  */
 package org.operacon.component.scheduledJobs
 
+import net.mamoe.mirai.message.data.Face
+import net.mamoe.mirai.message.data.buildMessageChain
 import org.operacon.component.Scheduler.friendMessage
 import org.operacon.component.Scheduler.quartzScheduler
 import org.operacon.component.Settings
@@ -17,7 +19,7 @@ import kotlin.random.Random
 
 class Dk : Job {
     override fun execute(context: JobExecutionContext?) {
-        // 在此处添加应当执行的任务体。使用 org.operacon.bean.Scheduler.friendMessage 和 groupMessage 发送消息
+        // 在此处添加应当执行的任务体。使用 org.operacon.component.Scheduler.friendMessage 和 groupMessage 发送消息
         if (!Settings.enableSpecialService) return
         val ls = File(Settings.pathSpecialService).readText().split(";;;")
         for (i in ls) {
@@ -27,12 +29,12 @@ class Dk : Job {
             try {
                 val m = dk(ii[1], ii[2], ii[3], ii[4])
                 if (m == "done")
-                    friendMessage(ii[0].toLong(), "今天帮你打了卡哦")
+                    friendMessage(ii[0].toLong(), buildMessageChain { +"今天帮你打了卡哦";+Face(Random.nextInt(0, 324)) })
                 else
-                    friendMessage(ii[0].toLong(), "没打上，错误原因：\n$m")
+                    friendMessage(ii[0].toLong(), buildMessageChain { +"没打上";+Face(9);+"，错误原因：\n$m" })
             } catch (e: Exception) {
                 e.printStackTrace()
-                friendMessage(ii[0].toLong(), "没打上，自己试试？")
+                friendMessage(ii[0].toLong(), buildMessageChain { +"没打上";+Face(9);+"自己试试吧" })
             }
         }
         quartzScheduler.deleteJob(DkHandler.jobDetail.key)

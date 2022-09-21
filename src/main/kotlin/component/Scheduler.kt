@@ -12,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import net.mamoe.mirai.Bot
+import net.mamoe.mirai.message.data.Message
 import org.operacon.component.scheduledJobs.DkHandler
 import org.quartz.impl.StdSchedulerFactory
 import org.quartz.Scheduler
@@ -26,7 +27,7 @@ object Scheduler {
         DkHandler.register()
     }
 
-    fun groupMessage(id: Long, message: String) = runBlocking {
+    fun groupMessage(id: Long, message: Message) = runBlocking {
         // 其他需要 suspend 的函数调用可以用类似的协程避免
         launch(Dispatchers.Unconfined) {
             try {
@@ -36,7 +37,7 @@ object Scheduler {
         }
     }
 
-    fun friendMessage(id: Long, message: String) = runBlocking {
+    fun friendMessage(id: Long, message: Message) = runBlocking {
         launch(Dispatchers.Unconfined) {
             try {
                 Bot.getInstance(Settings.selfId).getFriend(id)!!.sendMessage(message)

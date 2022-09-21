@@ -7,11 +7,14 @@
  */
 package org.operacon.component.scheduledJobs
 
+import net.mamoe.mirai.message.data.Face
+import net.mamoe.mirai.message.data.buildMessageChain
 import org.operacon.component.Scheduler.groupMessage
 import org.operacon.component.Scheduler.quartzScheduler
 import org.operacon.service.GroupCountService
 import org.operacon.service.groupJob.DrawLots
 import org.quartz.*
+import kotlin.random.Random
 
 class Statistics : Job {
     override fun execute(context: JobExecutionContext?) {
@@ -21,10 +24,16 @@ class Statistics : Job {
                 if (GroupCountService.messageCounter[i]!! == 0)
                     continue
                 groupMessage(
-                    i, "你群昨日共发言 ${GroupCountService.messageCounter[i]!!} 条，" +
-                            "其中图片 ${GroupCountService.imageCounter[i]!!} 张" +
-                            if (GroupCountService.noneBotCounter[i]!! == GroupCountService.messageCounter[i]!!) "~"
-                            else "~\n小湘发言 ${GroupCountService.messageCounter[i]!! - GroupCountService.noneBotCounter[i]!!} 条~"
+                    i, buildMessageChain {
+                        +("你群昨日共发言 ${GroupCountService.messageCounter[i]!!} 条，" +
+                                "其中图片 ${GroupCountService.imageCounter[i]!!} 张" +
+                                if (GroupCountService.noneBotCounter[i]!! == GroupCountService.messageCounter[i]!!) "~"
+                                else "~\n小湘发言 ${
+                                    GroupCountService.messageCounter[i]!! - GroupCountService
+                                        .noneBotCounter[i]!!
+                                } 条~")
+                        +Face(Random.nextInt(0, 324))
+                    }
                 )
                 GroupCountService.sendWordCloud(i)
                 GroupCountService.messageCounter[i] = 0
