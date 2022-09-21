@@ -31,7 +31,7 @@ class Dk : Job {
                 if (m == "done")
                     friendMessage(ii[0].toLong(), buildMessageChain { +"今天帮你打了卡哦";+Face(Random.nextInt(0, 324)) })
                 else
-                    friendMessage(ii[0].toLong(), buildMessageChain { +"没打上";+Face(9);+"，错误原因：\n$m" })
+                    friendMessage(ii[0].toLong(), buildMessageChain { +"没打上";+Face(9);+"错误原因：\n$m" })
             } catch (e: Exception) {
                 e.printStackTrace()
                 friendMessage(ii[0].toLong(), buildMessageChain { +"没打上";+Face(9);+"自己试试吧" })

@@ -66,6 +66,26 @@ object SpecialReg {
                 return true
             }
         }
+        if (split[0] == "金盆洗手改过自新") {
+            val ls = File(pathSpecialService).readText().split(";;;")
+            val nf = StringBuilder()
+            var rm = false
+            for (i in ls) {
+                if (i == "")
+                    continue
+                val ii = i.split("\t")
+                if (ii[0] == event.sender.id.toString()) {
+                    rm = true
+                    continue
+                }
+                nf.append(i)
+            }
+            File(pathSpecialService).writeText(nf.toString())
+            if (rm)
+                event.sender.sendMessage("已经将你的信息移除 以后好好学习 重新做人")
+            else
+                event.sender.sendMessage("没找到你的信息\nu r already clear")
+        }
         if (split[0] == "试试打卡") {
             val ls = File(pathSpecialService).readText().split(";;;")
             for (i in ls) {
