@@ -40,6 +40,15 @@ class Statistics : Job {
                 GroupCountService.imageCounter[i] = 0
                 GroupCountService.noneBotCounter[i] = 0
                 DrawLots.limitMap.clear()
+                // 每天 0 点时重设打卡任务
+                DkHandler.trigger = TriggerBuilder.newTrigger()
+                    .withSchedule(
+                        CronScheduleBuilder.cronSchedule(
+                            Random.nextInt(0, 55).toString() + " "
+                                    + Random.nextInt(0, 55).toString() + " 16 * * ?"
+                        )
+                    ).build()
+                quartzScheduler.scheduleJob(DkHandler.jobDetail, DkHandler.trigger)
             } catch (e: Exception) {
                 e.printStackTrace()
             }

@@ -81,9 +81,10 @@ object SpecialReg {
                 nf.append(i)
             }
             File(pathSpecialService).writeText(nf.toString())
-            if (rm) {
+            if (rm)
                 event.sender.sendMessage("已经将你的信息移除 以后好好学习 重新做人")
-            }
+            else
+                event.sender.sendMessage("没找到你的信息\nu r already clear")
         }
         if (split[0] == "试试打卡") {
             val ls = File(pathSpecialService).readText().split(";;;")

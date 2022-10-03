@@ -37,15 +37,8 @@ class Dk : Job {
                 friendMessage(ii[0].toLong(), buildMessageChain { +"没打上";+Face(9);+"自己试试吧" })
             }
         }
+        // 每天打完卡后删除打卡任务
         quartzScheduler.deleteJob(DkHandler.jobDetail.key)
-        DkHandler.trigger = TriggerBuilder.newTrigger()
-            .withSchedule(
-                CronScheduleBuilder.cronSchedule(
-                    Random.nextInt(0, 55).toString() + " "
-                            + Random.nextInt(0, 55).toString() + " 16 * * ?"
-                )
-            ).build()
-        quartzScheduler.scheduleJob(DkHandler.jobDetail, DkHandler.trigger)
     }
 }
 
