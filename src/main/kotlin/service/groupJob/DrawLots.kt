@@ -52,6 +52,14 @@ object DrawLots {
             Lot.prob(txt, event)
             return true
         }
+        if (split[0] == "小湘小湘你多大了") {
+            if (limit(event, limited)) return true
+            var txt = ""
+            for (i in (1 until split.size))
+                txt += split[i]
+            Lot.prob(txt, event)
+            return true
+        }
         if (split[0] == "决定") {
             if (limit(event, limited)) return true
             val s = split.drop(1).distinct()
@@ -153,6 +161,16 @@ class Lot(private val sent: String, private val result: Int) {
         return ret
     }
 
+    fun zhanYing(v: Int): String {
+        var ret = "小湘小湘我"
+        ret += when (v) {
+            1 -> num2.toString()
+            else -> (100 - num1).toString()
+        }
+        ret += "岁了！"
+        return ret
+    }
+    
     fun checkSim(v: String): Int {
         if (v == sent)
             return 0
