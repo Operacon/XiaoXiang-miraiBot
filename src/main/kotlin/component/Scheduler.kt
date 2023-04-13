@@ -13,7 +13,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import net.mamoe.mirai.Bot
 import net.mamoe.mirai.message.data.Message
-import org.operacon.component.scheduledJobs.DkHandler
 import org.quartz.impl.StdSchedulerFactory
 import org.quartz.Scheduler
 
@@ -24,7 +23,6 @@ object Scheduler {
 
     fun registerJobs() {
         StatisticsHandler.register()
-        DkHandler.register()
     }
 
     fun groupMessage(id: Long, message: Message) = runBlocking {
