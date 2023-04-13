@@ -108,28 +108,27 @@ object MasterService {
         for (i in Bot.getInstance(Settings.selfId).groups) {
             try {
                 i.sendMessage(event.message)
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 event.sender.sendMessage("[sudo] 向群聊 ${i.name}:${i.id} 广播失败。在该群的禁言状态：${i.isBotMuted}")
             }
         }
-        broadcastGpMap[event.sender.id] = false
         event.sender.sendMessage("[sudo] 群聊广播完成")
         broadcastGpMap[event.sender.id] = false
         return true
     }
 
     private suspend fun checkFrBc(event: FriendMessageEvent): Boolean {
-        if (!broadcastGpMap[event.sender.id]!!) return false
+        if (!broadcastFrMap[event.sender.id]!!) return false
         for (i in Bot.getInstance(Settings.selfId).friends) {
             try {
                 if (i.id != Settings.selfId)
                     i.sendMessage(event.message)
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 event.sender.sendMessage("[sudo] 向好友 ${i.nick}:${i.id} 广播失败")
             }
         }
         event.sender.sendMessage("[sudo] 群聊广播完成")
-        broadcastGpMap[event.sender.id] = false
+        broadcastFrMap[event.sender.id] = false
         return true
     }
 }
