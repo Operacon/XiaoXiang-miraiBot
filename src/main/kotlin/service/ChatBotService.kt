@@ -26,7 +26,7 @@ import kotlin.random.Random
 object ChatBotService {
 
     suspend fun groupScan(event: GroupMessageEvent): Boolean {
-        if (!Chat.enableForGroups and !Chat.enableActiveGroups)
+        if (!Chat.enableForAllGroups and !Chat.enableActiveGroups)
             return false
         if (repeatCache.containsKey(event.group.id) && repeatCache[event.group.id]!!.contentEquals(
                 event.message,
@@ -45,19 +45,23 @@ object ChatBotService {
                 called = true
             }
             if (called) {
-                if (Chat.enableForGroups) {
+                if (Chat.enableForAllGroups) {
                     if (Chat.enableActiveGroups and (event.group.id in Chat.activeGroups))
-                        groupSendMessage(chat(text, Chat.url[Chat.activeGroups.indexOf(event.group.id)]), event)
+                        groupSendMessage(chat(text, Chat.activeUrl[Chat.activeGroups.indexOf(event.group.id)]), event)
                     else
-                        groupSendMessage(chat(text, Chat.url[0]), event)
+                        groupSendMessage(chat(text, Chat.enabledUrl[0]), event)
                     return true
                 }
                 if (Chat.enableActiveGroups and (event.group.id in Chat.activeGroups)) {
-                    groupSendMessage(chat(text, Chat.url[Chat.activeGroups.indexOf(event.group.id)]), event)
+                    groupSendMessage(chat(text, Chat.activeUrl[Chat.activeGroups.indexOf(event.group.id)]), event)
+                    return true
+                }
+                if (event.group.id in Chat.enabledGroups) {
+                    groupSendMessage(chat(text, Chat.enabledUrl[Chat.enabledGroups.indexOf(event.group.id)]), event)
                     return true
                 }
             } else if (Chat.enableActiveGroups && (event.group.id in Chat.activeGroups)) {
-                text = chat(text, Chat.url[Chat.activeGroups.indexOf(event.group.id)], true)
+                text = chat(text, Chat.activeUrl[Chat.activeGroups.indexOf(event.group.id)], true)
                 if (Random.nextFloat() <= Chat.replyProb) {
                     groupSendMessage(text, event)
                     return true

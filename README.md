@@ -91,7 +91,6 @@
 
 #### 私聊
 
-- 奇妙的功能？或许可以发 `帮小忙干大事` 看看。不明白还想用的话，为什么不给作者发个邮件问问呢。
 
 #### 管理员
 
@@ -108,7 +107,7 @@
 #### 通用
 
 - 聊天机器人。（详见配置文件）
-    - 当然，需要自备聊天机器人。推荐使用 [GPT2-chitchat](https://github.com/yangjianxin1/GPT2-chitchat) 并写一个 web api （TODO：开源我写的）。
+    - 当然，需要自备聊天机器人。推荐使用 [GPT2-chitchat](https://github.com/yangjianxin1/GPT2-chitchat) 。
     - 群聊中，键入以 `。` 开头（可在配置文件中定制）的句子或者 @bot 以和 bot 聊天。
     - 积极群。一切消息转发给 bot 以维持语境，但 bot 仅有给定概率回复。
 
