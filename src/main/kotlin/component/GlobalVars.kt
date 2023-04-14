@@ -20,8 +20,8 @@ object GlobalVars {
 
     val okHttpClient = OkHttpClient().newBuilder()
         .connectTimeout(10, TimeUnit.SECONDS)
-        .writeTimeout(120, TimeUnit.SECONDS)
-        .readTimeout(120, TimeUnit.SECONDS).build()
+        .writeTimeout(150, TimeUnit.SECONDS)
+        .readTimeout(150, TimeUnit.SECONDS).build()
     val mediaTypePlain = "text/plain".toMediaTypeOrNull()
     val mediaTypeJson = "application/json".toMediaTypeOrNull()
 }

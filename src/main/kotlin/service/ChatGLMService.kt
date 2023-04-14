@@ -7,6 +7,8 @@
  */
 package org.operacon.service
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -18,6 +20,7 @@ import org.operacon.component.ChatGLM
 import org.operacon.component.GlobalVars
 import org.operacon.component.GlobalVars.mediaTypeJson
 import java.time.LocalDateTime
+import kotlin.coroutines.coroutineContext
 
 object ChatGLMService {
     private val reqMap: HashMap<Long, GLMUserRequest> = HashMap()
@@ -29,7 +32,11 @@ object ChatGLMService {
             var prompt = ""
             split.drop(1).forEach { prompt += it }
             if (!reqMap.containsKey(event.sender.id)) {
-                event.group.sendMessage(event.message.quote() + "生成中。ChatGLM响应较慢，每个人都有自己专用的 history list。请适度使用。")
+                event.group.sendMessage(
+                    event.message.quote()
+                            + "生成中。ChatGLM响应较慢，每个人都有自己专用的 history list。请适度使用。"
+                            + "发送 glm clear 以清除 history。"
+                )
                 reqMap[event.sender.id] = GLMUserRequest()
             }
             if (!reqMap[event.sender.id]!!.replied) {
@@ -42,16 +49,23 @@ object ChatGLMService {
                 event.group.sendMessage(event.message.quote() + "Cooling. Wait.")
                 return true
             }
+            if (prompt == "clear") {
+                reqMap[event.sender.id]!!.history = ArrayList()
+                event.group.sendMessage(event.message.quote() + "Done.")
+                return true
+            }
             reqMap[event.sender.id]!!.lastCallTime = LocalDateTime.now()
             reqMap[event.sender.id]!!.replied = false
-            val rsp = try {
-                chat(event.sender.id, prompt)
-            } catch (_: Exception) {
-                "可能是服务器被撑爆了（；´д｀）ゞ"
+            CoroutineScope(coroutineContext).launch {
+                val rsp = try {
+                    chat(event.sender.id, prompt)
+                } catch (_: Exception) {
+                    "可能是服务器被撑爆了\n（；´д｀）ゞ"
+                }
+                event.group.sendMessage(event.message.quote() + rsp + "\n\nChatGLM 冷却 ${ChatGLM.coolDownDelay} 秒。")
+                reqMap[event.sender.id]!!.lastCallTime = LocalDateTime.now()
+                reqMap[event.sender.id]!!.replied = true
             }
-            event.group.sendMessage(event.message.quote() + rsp + "\n\nChatGLM 冷却 ${ChatGLM.coolDownDelay} 秒。")
-            reqMap[event.sender.id]!!.lastCallTime = LocalDateTime.now()
-            reqMap[event.sender.id]!!.replied = true
             return true
         }
         return false
@@ -71,11 +85,10 @@ object ChatGLMService {
         val response = GlobalVars.okHttpClient.newCall(request).execute()
         val rsp = Json.decodeFromString(GLMRsp.serializer(), response.body!!.string())
         if (rsp.status != 200)
-            return "但是生成出现故障了（；´д｀）ゞ"
+            return "但是生成出现故障了\n（；´д｀）ゞ"
         reqMap[person]!!.history = rsp.history
         if (reqMap[person]!!.history.size > ChatGLM.maxHistoryLength)
             reqMap[person]!!.history = reqMap[person]!!.history.drop(1)
-        println(rsp.history)
         return rsp.response
     }
 }
