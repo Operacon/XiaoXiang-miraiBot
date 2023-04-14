@@ -80,9 +80,7 @@ object Chat : ReadOnlyPluginConfig("ChatBot") {
     @ValueDescription("设置请求 ChatBot 地址的方法")
     val method by value("POST")
 
-    @ValueDescription(
-        "设置在哪些群聊中开启服务。每个群聊调用 ChatBot 的消息会被发给各自的地址，列表顺序与地址池一一对应。"
-    )
+    @ValueDescription("设置在哪些群聊中开启服务。每个群聊调用 ChatBot 的消息会被发给各自的地址，列表顺序与地址池一一对应。")
     val enabledGroups by value(mutableListOf<Long>(114514))
 
     @ValueDescription("设置开启服务群请求 ChatBot 的地址池。Params: text 传参，例如 http://localhost:8520/chat?text=发送的句子")
@@ -113,4 +111,30 @@ object WordCloud : ReadOnlyPluginConfig("WordCloud") {
 
     @ValueDescription("设置请求词云的地址，参考 README")
     val url by value("http://localhost:6785/wc")
+}
+
+object ChatGLM : ReadOnlyPluginConfig("ChatGLM") {
+    @ValueDescription("设置在哪些群聊中开启服务。")
+    val enabledGroups by value(mutableListOf<Long>(114514))
+
+    @ValueDescription("设置为哪些私聊开启服务。")
+    val enabledFriends by value(mutableListOf<Long>(114514))
+
+    @ValueDescription("设置 ChatGLM API 地址。使用原仓库 api.py 的请求定义。")
+    val url by value("http://127.0.0.1:8000")
+
+    @ValueDescription("设置 history 最大大小。")
+    val maxHistoryLength by value(20)
+
+    @ValueDescription("设置 max_length。")
+    val maxLength by value<Long>(512)
+
+    @ValueDescription("设置 top_p。")
+    val topP by value<Double>(0.7)
+
+    @ValueDescription("设置 temperature。")
+    val temperature by value<Double>(0.95)
+
+    @ValueDescription("设置冷却时间。单位为秒。")
+    val coolDownDelay by value<Long>(120)
 }

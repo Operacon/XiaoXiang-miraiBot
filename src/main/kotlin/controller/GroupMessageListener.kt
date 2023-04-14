@@ -11,6 +11,7 @@ import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.content
 import org.operacon.service.ChatBotService
 import org.operacon.component.GlobalVars
+import org.operacon.service.ChatGLMService
 import org.operacon.service.GroupCountService
 import org.operacon.service.groupJob.*
 
@@ -22,6 +23,7 @@ class GroupMessageListener(private val event: GroupMessageEvent) {
         if (GroupCountService.hello(event, split)) return
         if (DrawLots.scan(event, split)) return
         if (Bai.scan(event, split)) return
+        if (ChatGLMService.groupScan(event, split)) return
 
         if (ChatBotService.groupScan(event)) return
         if (GroupCountService.repeat(event)) return

@@ -11,10 +11,7 @@ import net.mamoe.mirai.Bot
 import net.mamoe.mirai.contact.isBotMuted
 import net.mamoe.mirai.event.events.FriendMessageEvent
 import org.operacon.XiaoXiang.reload
-import org.operacon.component.Bai
-import org.operacon.component.Chat
-import org.operacon.component.Settings
-import org.operacon.component.WordCloud
+import org.operacon.component.*
 
 object MasterService {
     private val groupMap = HashMap<String, Long>()
@@ -83,6 +80,7 @@ object MasterService {
         Bai.reload()
         Chat.reload()
         WordCloud.reload()
+        ChatGLM.reload()
         for (i in Settings.groups) {
             val j = i.split(":")
             groupMap[j[0]] = j[1].toLong()

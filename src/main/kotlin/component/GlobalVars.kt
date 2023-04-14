@@ -9,6 +9,7 @@ package org.operacon.component
 
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
+import java.util.concurrent.TimeUnit
 
 object GlobalVars {
     val splitter = Regex(""" +""")
@@ -17,6 +18,10 @@ object GlobalVars {
     val atMe = Regex("@" + Settings.selfId.toString())
     val pos = Regex("""\d{2,3}\.\d{6}""")
 
-    val okHttpClient = OkHttpClient().newBuilder().build()
+    val okHttpClient = OkHttpClient().newBuilder()
+        .connectTimeout(10, TimeUnit.SECONDS)
+        .writeTimeout(120, TimeUnit.SECONDS)
+        .readTimeout(120, TimeUnit.SECONDS).build()
     val mediaTypePlain = "text/plain".toMediaTypeOrNull()
+    val mediaTypeJson = "application/json".toMediaTypeOrNull()
 }
